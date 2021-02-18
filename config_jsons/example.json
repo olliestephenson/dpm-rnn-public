@@ -1,0 +1,16 @@
+{
+    "train_dataset": "test_dataset",
+    "deploy_dataset": "test_dataset",
+    "model_hyperparameters": {
+        "rnn_dim": 256,
+        "rnn_cell" : "gru",
+        "h_dim": 128,
+        "num_layers": 1
+    },
+    "training_hyperparameters": {
+        "batch_size": 256,
+        "num_epochs": 20,
+        "learning_rate": 0.0005,
+        "seed": 128
+    }
+}

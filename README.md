@@ -84,19 +84,11 @@ In general, you want as small a model as possible without affecting performance.
 
 In general, you want small `learning_rate` and `batch_size` as long as it doesn't take too many `num_epochs` to converge.
 
-## Future improvements
-
-[ ] Randomness seeding is not working as intended. Relevant for reproducing results.
-
-[ ] Add L2-weight normalization (`weight_decay` parameter in optimizer, see [here](https://pytorch.org/docs/stable/optim.html#torch.optim.Adam)). Can sometimes help.
-
-[ ] Adaptive `learning_rate` that decreases as learning plateaus. 
-
-
 ## Credit 
 
 Citation: Stephenson et al. 2021, IEEE TGRS (In Revision)
 Code written by Eric Zhan, with contributions by Oliver Stephenson 
+
 Contact: oliver.stephenson@caltech.edu
 
 ## Dislaimer

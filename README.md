@@ -8,7 +8,7 @@ Written in PyTorch v1.0.1
 
 These scripts are used to create damage proxy maps from InSAR coherence time series using machine learning. The input data is a sequential series of preseismic InSAR coherence images (i.e. if you have SAR acquisitions A,B,C then we want the coherences for AB and BC) and one coseismic coherence image. Best performance will be obtained when the temporal baseline is constant between acquisitsions.
 
-This code assumes that you already have a stack of coherence images. These images can be produced using Sentiel-1 data (https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/) processed using the InSAR Scientific Computing Environment (https://github.com/isce-framework/isce2).
+This code assumes that you already have a stack of coherence images. These images can be produced using Sentiel-1 data (https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/), processed using the InSAR Scientific Computing Environment (https://github.com/isce-framework/isce2).
 
 THIS IS RESEARCH CODE PROVIDED TO YOU "AS IS" WITH NO WARRANTIES OF CORRECTNESS. USE AT YOUR OWN RISK.
 

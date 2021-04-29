@@ -65,12 +65,11 @@ def compute_scores(model, dataset, device, return_ts=False):
 
     if return_ts:
         # Full prediction arrays - can be large 
-        print('Outputting a prediction for every time step. This can be a lot of data')
+        print('Outputting a prediction for every time step. This can be a lot of data for large coherence timeseries.')
         all_means = np.zeros((*dataset_shape,sequence_length), dtype=np.half)
         all_stds = np.zeros((*dataset_shape,sequence_length), dtype=np.half)
         all_scores = np.zeros((*dataset_shape,sequence_length), dtype=np.half)
-        # Duplicating the coherence for convenience in plotting, not necessary 
-        # TODO get rid of this and read coherence from the original file
+        # Duplicating the coherence for convenience in plotting 
         all_coherence_pred = np.zeros((*dataset_shape,sequence_length), dtype=np.half)
 
     # Iterating through deploy dataset in order (dataloader has shuffle=False)
@@ -159,8 +158,7 @@ if __name__ == '__main__':
     coseismic_dpm_dir = os.path.join(save_dir,'coseismic_dpm')
     full_ts_dir = os.path.join(save_dir,'full_ts')
     
-    # Need to be careful if we remove e.g. coseismic_dpm dir 
-    # TODO replace 'seismic' with 'event'
+    # Check if we have output directories, create them if not
     if not os.path.exists(save_dir):
         os.makedirs(os.path.join(save_dir))
     if not os.path.exists(coseismic_dpm_dir):
@@ -169,9 +167,7 @@ if __name__ == '__main__':
         if not os.path.exists(full_ts_dir):
             os.makedirs(full_ts_dir)
         
-        
     print('Save directory:\t {}'.format(save_dir))
-    
 
     # Get device (i.e. GPU or CPU)
     device = get_device(args.device_id)

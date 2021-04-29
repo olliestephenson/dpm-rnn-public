@@ -6,7 +6,7 @@
         "event_index": "<event index>"
     },
     "test_dataset": {
-        "path": "/home/ezhan/dpm-rnn-public/test_dataset.npy",
+        "path": "./test_dataset.npy",
         "shape": [100, 100],
         "length": 10,
         "event_index": 9

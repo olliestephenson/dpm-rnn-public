@@ -16,6 +16,8 @@ These scripts are used to create damage proxy maps from sequential InSAR coheren
 
 This code assumes that you already have a stack of coherence images. These images can be produced using freely available [Sentiel-1 data](https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/), which can be processed using the [InSAR Scientific Computing Environment (ISCE)](https://github.com/isce-framework/isce2). The method has not been tested with data from other SAR satellites, but will presumably work similarly assuming there are regular acqusitions before the natural hazard.
 
+When creating damage maps you will need to think about your coordinate system. We do all of our processing in 'radar' coordinates, then map the final damage map to geographic coordinates for plotting/analysis. 
+
 This method assumes that your natural hazard occured between two satellite acqusitions, with no anomalous behavior beforehand. Results may be worse for seasonal hazards, or hazards that occured over a longer period of time. We welcome discussions about potential improvements/modifications. Please get in touch! 
 
 

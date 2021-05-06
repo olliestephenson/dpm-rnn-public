@@ -40,7 +40,7 @@ This method assumes that your natural hazard occured between two satellite acqus
 2. `deploy_dataset` (required, str) - coherence dataset used to generate DPM (usually over a smaller region, e.g. a town or a city).
 3. `model_hyperparamters` (optional, dict) - see `config_jsons/example.json`, default parameters in code.
 4. `training_hyperparameters` (optional, dict) - see `config_jsons/example.json`, default parameters in code.
-5. `transform` (optional, str) - transform applied to map the coherence from [0,1] to an unbounded space before training. Either logit_squared` (the logit transform of the coherence squared, used in the paper, default) or `logit` (logit transform without squaring the coherence). Other tranforms can easily be added. 
+5. `transform` (optional, str) - transform applied to map the coherence from [0,1] to an unbounded space before training. Either `logit_squared` (the logit transform of the coherence squared, used in the paper, default) or `logit` (logit transform without squaring the coherence). Other tranforms can easily be added. 
 
 `dataset.json` contains information about available coherence time series datasets. The dataset names are keys in this file and also used for `train_dataset` and `deploy_dataset` fields in config files.  
 1. `path` (required, str) - path to data file.
@@ -107,7 +107,7 @@ Code written by Eric Zhan, with contributions by Oliver Stephenson
 Contact: oliver.stephenson@caltech.edu
 
 ## Dislaimer
-This software is distributed under an MIT License 
+This software is distributed under an MIT License. 
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

@@ -100,11 +100,20 @@ In general, you want as small a model as possible (which will be less prone to o
 
 In general, you want small `learning_rate` and `batch_size` as long as it doesn't take too many `num_epochs` to converge.
 
+### Installation
+
+In order to run this code, you need to install PyTorch and several dependencies. We recommend using a package management system such as [Conda](https://docs.conda.io/en/latest/) to install these packages into a dedicated environment.  
+
+If you have GPUs available and want to make use of them during training (which is substantially faster), you will need to install the relevant version of the cudatoolkit package, or potentially build from source. This will depend on your machine and CUDA version. See [here](https://pytorch.org/get-started/locally/) for more information. 
+
+To check if you have access to GPU training, after installation open a python terminal and do 'import torch; torch.cuda.is_available()'. This should be true.
+
+
 ## Credit 
 
 Citation: Stephenson et al. 2021, IEEE TGRS (in revision), and see this [AGU abstract](https://ui.adsabs.harvard.edu/abs/2019AGUFM.G13C0567S/abstract). 
 
-Code written by Eric Zhan, with contributions by Oliver Stephenson 
+Code written by Eric Zhan and Oliver Stephenson 
 
 Contact: oliver.stephenson@caltech.edu
 

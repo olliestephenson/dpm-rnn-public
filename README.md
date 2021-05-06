@@ -102,7 +102,7 @@ In general, you want small `learning_rate` and `batch_size` as long as it doesn'
 
 ## Credit 
 
-Citation: Stephenson et al. 2021, IEEE TGRS (in revision)
+Citation: Stephenson et al. 2021, IEEE TGRS (in revision), and see this [AGU abstract](https://ui.adsabs.harvard.edu/abs/2019AGUFM.G13C0567S/abstract). 
 
 Code written by Eric Zhan, with contributions by Oliver Stephenson 
 

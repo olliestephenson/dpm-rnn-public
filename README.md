@@ -31,7 +31,7 @@ This method assumes that your natural hazard occured between two satellite acqus
 
 `rnn_model.py` contains the RNN model, implemented with PyTorch.
 
-`scripts` directory contains simple scripts for exploring the code output
+`scripts` directory contains simple scripts for exploring the code output.
 
 ### JSON files
 

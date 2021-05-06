@@ -2,9 +2,13 @@
 
 Deep learning code implementing the satellite-based damage mapping method from Stephenson et al. 2021, IEEE TGRS (in revision). 
 
+Contact: oliver.stephenson@caltech.edu
+
 Written in PyTorch v1.0.1
 
 ## Notes 
+
+This readme assumes you already have familiarity with SAR, InSAR, python and deep learning using Pytorch. If you're interested in satellite-based damage mapping but any of these terms are unfamiliar to you, please get in touch.  
 
 These scripts are used to create damage proxy maps from sequential InSAR coherence time series using machine learning. The input data are a sequential series of preseismic InSAR coherence images (i.e. if you have SAR acquisitions A,B,C then we want the coherences for A-B and B-C) and one coseismic coherence image (i.e. the coherence between the final preseismc SAR acquisition and the first postseismic SAR acquisition). Best performance will be obtained when the temporal baseline is constant between acquisitsions.
 
@@ -93,7 +97,8 @@ In general, you want small `learning_rate` and `batch_size` as long as it doesn'
 
 ## Credit 
 
-Citation: Stephenson et al. 2021, IEEE TGRS (In Revision)
+Citation: Stephenson et al. 2021, IEEE TGRS (in revision)
+
 Code written by Eric Zhan, with contributions by Oliver Stephenson 
 
 Contact: oliver.stephenson@caltech.edu

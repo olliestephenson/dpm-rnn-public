@@ -6,15 +6,18 @@ Contact: oliver.stephenson@caltech.edu
 
 Written in PyTorch v1.0.1
 
+THIS IS RESEARCH CODE PROVIDED TO YOU "AS IS" WITH NO WARRANTIES OF CORRECTNESS. USE AT YOUR OWN RISK.
+
 ## Notes 
 
-This readme assumes you already have familiarity with SAR, InSAR, python and deep learning using Pytorch. If you're interested in satellite-based damage mapping but any of these terms are unfamiliar to you, please get in touch.  
+This readme assumes you already have familiarity with [SAR](https://en.wikipedia.org/wiki/Synthetic-aperture_radar), [InSAR](https://en.wikipedia.org/wiki/Interferometric_synthetic-aperture_radar), [Python](https://www.python.org/), and [deep learning](https://en.wikipedia.org/wiki/Deep_learning) using [PyTorch](https://pytorch.org/). All software and data used are open source, but the processing can be involved for people unfamiliar with the details. Please check out our paper for a more detailed presentation of the method. If you're interested in satellite-based damage mapping but any of these terms are unfamiliar to you, please get in touch.  
 
-These scripts are used to create damage proxy maps from sequential InSAR coherence time series using machine learning. The input data are a sequential series of preseismic InSAR coherence images (i.e. if you have SAR acquisitions A,B,C then we want the coherences for A-B and B-C) and one coseismic coherence image (i.e. the coherence between the final preseismc SAR acquisition and the first postseismic SAR acquisition). Best performance will be obtained when the temporal baseline is constant between acquisitsions.
+These scripts are used to create damage proxy maps from sequential InSAR coherence time series using machine learning. The input data are a sequential series of pre-event InSAR coherence images (i.e. if you have SAR acquisitions A,B,C then we want the coherences for A-B and B-C) and one co-event coherence image (i.e. the coherence between the final pre-event SAR acquisition and the first post-event SAR acquisition). Best performance will be obtained when the temporal baseline is constant between acquisitsions.
 
-This code assumes that you already have a stack of coherence images. These images can be produced using freely available Sentiel-1 data (https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/), which can be processed using the InSAR Scientific Computing Environment (https://github.com/isce-framework/isce2). The method has not been tested with data from other SAR satellites, but will presumably work similarly assuming there are regular acqusitions before the natural disaster. 
+This code assumes that you already have a stack of coherence images. These images can be produced using freely available [Sentiel-1 data](https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/), which can be processed using the [InSAR Scientific Computing Environment (ISCE)](https://github.com/isce-framework/isce2). The method has not been tested with data from other SAR satellites, but will presumably work similarly assuming there are regular acqusitions before the natural hazard.
 
-THIS IS RESEARCH CODE PROVIDED TO YOU "AS IS" WITH NO WARRANTIES OF CORRECTNESS. USE AT YOUR OWN RISK.
+This method assumes that your natural hazard occured between two satellite acqusitions, with no anomalous behavior beforehand. Results may be worse for seasonal hazards, or hazards that occured over a longer period of time. We welcome discussions about potential improvements/modifications. Please get in touch! 
+
 
 ## Code structure
 
@@ -70,7 +73,7 @@ This will train a model with configuration in `config_jsons/test.json` on GPU de
 3. `log.json` - log file of training.
 4. `summary.json` - various summary statistics computed during training.
 5. `config.json` - duplicate of the config file (for reproducability).
-6. `coseismic_dpm/` - folder that contains the mean and standard deviation and z-scores of coseismic coherence under distribution predicted by the model. All outputs are in the transformed space (i.e. the coherence has been mapped to an unbounded space).
+6. `coseismic_dpm/` - folder that contains the mean and standard deviation and z-scores of coseismic (or co-event, for non-earthquake nautral hazards) coherence under distribution predicted by the model. All outputs are in the transformed space (i.e. the coherence has been mapped to an unbounded space).
 7. `full_ts/` - optional folder that contains the full time series of the coherence, forecast means, forcast standard deviations and calculated z-scores (controlled by `return_ts` boolean). All outputs are in the transformed space.
 
 ## Hyperparameter search

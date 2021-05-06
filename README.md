@@ -37,7 +37,7 @@ This method assumes that your natural hazard occured between two satellite acqus
 
 `config_jsons/` contains configuration JSONs for `generate_dpm.py`:
 1. `train_dataset` (required, str) - coherence dataset used to train model (usually over a large region, around 100 km by 100 km).
-2. `deploy_dataset` (required, str) - coherence dataset used to generate DPM (usually over a smaller region, e.g. a town or a city).
+2. `deploy_dataset` (required, str) - coherence dataset used to generate DPM (usually over a smaller area in the same geographic region, e.g. a town or a city).
 3. `model_hyperparamters` (optional, dict) - see `config_jsons/example.json`, default parameters in code.
 4. `training_hyperparameters` (optional, dict) - see `config_jsons/example.json`, default parameters in code.
 5. `transform` (optional, str) - transform applied to map the coherence from [0,1] to an unbounded space before training. Either `logit_squared` (the logit transform of the coherence squared, used in the paper, default) or `logit` (logit transform without squaring the coherence). Other tranforms can easily be added. 

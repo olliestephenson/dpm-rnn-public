@@ -33,11 +33,11 @@ def run_epoch(dataloader, model, optimizer, device, train=True):
 
         # Compute loss (negative log-likelihood)
         pred_means, pred_logvars = model(batch,generate_dpm=False) # this calls model.forward()
-        nll_batch = nll_gaussian(pred_means, pred_logvars, batch) # compute negative log-likelihood of batch under predicted Gaussians
+        nll_batch = nll_gaussian(pred_means, pred_logvars, batch) # compute negative log-likelihood (NLL) of batch under predicted Gaussians
 
         if train:
             optimizer.zero_grad()
-            nll_batch.backward() # compute gradients, stored in 
+            nll_batch.backward() # compute gradients
             torch.nn.utils.clip_grad_norm_(model.parameters(), 10) # clips norm of gradients to 10
             optimizer.step() # one step of gradient descent
 
@@ -54,13 +54,6 @@ def train_model(train_config, model, dataset, device, save_dir):
     assert 'num_epochs' in train_config and isinstance(train_config['num_epochs'], int) and train_config['num_epochs'] > 0
     assert 'learning_rate' in train_config and train_config['learning_rate'] > 0.0
 
-    # Sample and fix a random seed if not set in train config (for reproducability)
-    # See https://pytorch.org/docs/stable/notes/randomness.html
-    if 'seed' not in train_config:
-        train_config['seed'] = random.randint(0, 9999)
-        print('Seeding randomly')
-    else:
-        print('Using supplied seed')
 
     seed = train_config['seed']
     torch.manual_seed(seed)
@@ -68,17 +61,11 @@ def train_model(train_config, model, dataset, device, save_dir):
     random.seed(seed) 
     torch.cuda.manual_seed_all(seed)
     torch.cuda.manual_seed(seed)
-    
-    deterministic=True
-    # Some issues with determinism 
-    if deterministic: 
-        print('Some issues with deterministic training, please be careful')
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
-        torch.set_deterministic(True) 
-        torch.backends.cudnn.enabled = False
-    
-    # Also may need to consider the number of workers in dataloader
+
+    # torch.backends.cudnn.deterministic = True
+    # torch.backends.cudnn.benchmark = False
+    # torch.set_deterministic(True) 
+    # torch.backends.cudnn.enabled = False
 
     # Initialize dataloaders
     # See documentation at https://pytorch.org/docs/stable/data.html

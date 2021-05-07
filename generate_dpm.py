@@ -4,6 +4,7 @@ import numpy as np
 import os
 import torch
 from torch.utils.data import DataLoader
+import random
 
 from coherence_timeseries import Coherence_Timeseries
 from rnn_model import RNN
@@ -47,8 +48,10 @@ def get_device(device_id):
 
 
 def compute_scores(model, dataset, device, return_ts=False):
-    ''' Can chose to return the forecast means and standard deviations for every time step using return_ts '''
-    # TODO This function has a variable number of outputs, better to put into a dictionary 
+    '''  
+    Compute DPM scores with a given dataset and model
+    Can chose to return the forecast means and standard deviations for every time step using return_ts bool
+    '''
     
     print('Computing coseismic scores ...')
     # Initialize dataloader
@@ -57,7 +60,6 @@ def compute_scores(model, dataset, device, return_ts=False):
     dataloader.dataset.deploy()
 
     dataset_shape = deploy_dataset.dataset_shape
-    sequence_length = deploy_dataset.sequence_length
     # DPM np.arrays to be saved
     dpm_means = np.zeros(dataset_shape, dtype=np.half)
     dpm_stds = np.zeros(dataset_shape, dtype=np.half)
@@ -66,6 +68,8 @@ def compute_scores(model, dataset, device, return_ts=False):
     if return_ts:
         # Full prediction arrays - can be large 
         print('Outputting a prediction for every time step. This can be a lot of data for large coherence timeseries.')
+        # Just save pre- and co-event data/predicitions
+        sequence_length = deploy_dataset.event_index + 1
         all_means = np.zeros((*dataset_shape,sequence_length), dtype=np.half)
         all_stds = np.zeros((*dataset_shape,sequence_length), dtype=np.half)
         all_scores = np.zeros((*dataset_shape,sequence_length), dtype=np.half)
@@ -113,13 +117,20 @@ def compute_scores(model, dataset, device, return_ts=False):
             all_scores[batch_idx] = score_all.squeeze().cpu().numpy() 
             all_coherence_pred[batch_idx] = batch_pred.squeeze().cpu().numpy() 
 
-    # Variable number of outputs if we're outputting the full time series 
-    # TODO Improve this - don't want variable numbers of outputs. Just output as dictionary 
-    if return_ts:
-        return dpm_means, dpm_stds, dpm_scores, all_means, all_stds, all_scores, all_coherence_pred
-    else:
-        return dpm_means, dpm_stds, dpm_scores
+    result_dic = dict()
+    result_dic['dpm_means'] = dpm_means # mean for co-event forecast
+    result_dic['dpm_stds'] = dpm_stds # std. dev. for co-event forecast
+    result_dic['dpm_scores'] = dpm_scores # z-score for co-event damage proxy map
 
+    # Output values for every timestep 
+    if return_ts:
+        result_dic['all_means'] = all_means # mean of forecast
+        result_dic['all_stds'] = all_stds # std. dev. of forecast
+        result_dic['all_scores'] = all_scores # z score 
+        result_dic['all_coherence_pred'] = all_coherence_pred # coherence values that we're trying to predict
+        # This duplicates the coherence for convenience. Can remove if coherence datasets are large
+
+    return result_dic
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -141,6 +152,9 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--device_id', type=int,
                         required=False, default=-1,
                         help='device to use (cpu or gpu)')
+    parser.add_argument('--best_model', default=None, type=str,
+                        required=False,
+                        help='path to PyTorch state_dict from previous training to deploy on the data (skips training, optional)')
     args = parser.parse_args()
 
     # Load config JSON and check for required fields
@@ -179,8 +193,16 @@ if __name__ == '__main__':
     
     training_params = config['training_hyperparameters'] if 'training_hyperparameters' in config else DEFAULT_TRAINING_PARAMS
     
-    # Preprocess training dataset
+    # Sample and fix a random seed if not set in train config
+    # See https://pytorch.org/docs/stable/notes/randomness.html
+    if 'seed' not in training_params:
+        print('Seeding randomly')
+        training_params['seed'] = random.randint(0, 9999)
+    else:
+        print('Using supplied seed')
     seed = training_params['seed']
+    
+    # Preprocess training dataset
     train_dataset.remove_nans() # remove nans from data
     train_dataset.unbound(config['transform']) # apply transform to coherence values
     train_dataset.create_test_set(seed=seed) # create test set
@@ -190,9 +212,21 @@ if __name__ == '__main__':
     model_params['data_dim'] = train_dataset.data_dim
     model = RNN(model_params).to(device) # move model onto device
 
-    # Check if best_model.pth already exists (don't want to accidentally overwrite)
-    if not os.path.isfile(os.path.join(save_dir, 'best_model.pth')):
-        print("best_model.pth not found, starting training")
+    # Check if best_model.pth already exists from previous training, or if we're passing a model via the command line
+
+    # If we're passing a previous model from the command line, use that 
+    if args.best_model is not None: 
+        best_model_path = args.best_model
+        print("Loading a pre-existing model from {}".format(args.best_model))
+
+    # If we can't find a model from the command line, look for one saved in save_dir
+    elif os.path.isfile(os.path.join(save_dir,'best_model.pth')):
+        best_model_path = os.path.join(save_dir,'best_model.pth')
+        print('Found a best model from previous training: {}'.format(best_model_path))
+
+    # If we don't have a model yet, we'll have to train one
+    elif not os.path.isfile(os.path.join(save_dir, 'best_model.pth')):
+        print("No model supplied or found, starting training")
         # Train model
         # training_params = config['training_hyperparameters'] if 'training_hyperparameters' in config else DEFAULT_TRAINING_PARAMS
         training_params, summary, log = train_model(training_params, model, train_dataset, device, save_dir)
@@ -210,13 +244,15 @@ if __name__ == '__main__':
         config['training_hyperparameters'] = training_params
         with open(os.path.join(save_dir, 'config.json'), 'w') as f:
             json.dump(config, f, indent=4)
+        best_model_path = os.path.join(save_dir,'best_model.pth')
 
     else:
-        best_model_path = os.path.join(save_dir,'best_model.pth')
-        print('Loading existing best model from {}'.format(best_model_path))
+        # Shouldn't end up here!
+        raise Exception('Problem loading or training a model')
 
     # Load best model for computing dpm
-    state_dict = torch.load(os.path.join(save_dir, 'best_model.pth'), map_location=lambda storage, loc: storage)
+    # Lambda function to deal with GPU vs CPU storage
+    state_dict = torch.load(best_model_path, map_location=lambda storage, loc: storage)
     model.load_state_dict(state_dict)
     model = model.eval()
 
@@ -225,19 +261,21 @@ if __name__ == '__main__':
     # Not necessary for forecasting, although should mask them out if deploying in response scenario
     deploy_dataset.unbound(config['transform'])
 
-    if args.return_ts:
-        # Compute DPMs
-        dpm_means, dpm_stds, dpm_scores, all_means, all_stds, all_scores, all_coherence_pred = compute_scores(model, deploy_dataset, device, args.return_ts)
-        # TODO Can just save means and stds, then read the coherence from original file and compute the scores to avoid duplication
-        np.savez(os.path.join(full_ts_dir,'full_ts.npz'),pred_means=all_means,pred_stds=all_stds,z_scores=all_scores,coherence=all_coherence_pred)
-        # np.save(os.path.join(full_ts_dir, 'all_means.npy'), all_means)
-        # np.save(os.path.join(full_ts_dir, 'all_stds.npy'), all_stds)
-        # np.save(os.path.join(full_ts_dir, 'all_scores.npy'), all_scores)
-        # np.save(os.path.join(full_ts_dir, 'all_coherence.npy'), all_coherence_pred)
+    dpm_output_dic = compute_scores(model, deploy_dataset, device, args.return_ts)
+    
+    dpm_means = dpm_output_dic['dpm_means'] # mean for co-event forecast
+    dpm_stds = dpm_output_dic['dpm_stds'] # std. dev. for co-event forecast
+    dpm_scores = dpm_output_dic['dpm_scores'] # z-score for co-event damage proxy map
 
-    else:
-        dpm_means, dpm_stds, dpm_scores = compute_scores(model, deploy_dataset, device)
-        
+    # Output values for every timestep 
+    if args.return_ts:
+        all_means = dpm_output_dic['all_means'] # mean of forecast
+        all_stds = dpm_output_dic['all_stds'] # std. dev. of forecast
+        all_scores = dpm_output_dic['all_scores'] # z score 
+        all_coherence_pred = dpm_output_dic['all_coherence_pred'] # coherence values that we're trying to predict
+
+        # full_ts.npz duplicates the coherence time series
+        np.savez(os.path.join(full_ts_dir,'full_ts.npz'),pred_means=all_means,pred_stds=all_stds,z_scores=all_scores,coherence=all_coherence_pred)
 
     # Save DPMS
     np.save(os.path.join(coseismic_dpm_dir, 'means.npy'), dpm_means)

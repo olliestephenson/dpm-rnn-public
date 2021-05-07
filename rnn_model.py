@@ -61,8 +61,6 @@ class RNN(nn.Module):
         batch = batch.transpose(0,1) # PyTorch method for swapaxes
         seq_len, batch_size, _ = batch.size()
 
-        # if self.config['num_layers'] != 1:
-        #     raise Exception('Multi-layer GRU not working currently')
         # Initialize initial hidden state h_0 to be all 0s
         h_0 = torch.zeros(self.config['num_layers'], batch_size, self.config['rnn_dim']).to(batch.device)
 
@@ -71,8 +69,6 @@ class RNN(nn.Module):
         # hiddens has shape (seq_len, batch_size, rnn_dim), which corresponds to h_1 to h_T
         self.rnn.flatten_parameters()
         hiddens, _ = self.rnn(batch, h_0)
-        # print(hiddens.shape)
-        # print(h_0.shape)
 
         # h_(T-1) is used to predict x_T which is the final preseismic coherence measurement 
         # We want to use h_(t-1) to predict x_t, so we want hidden states h_0 to h_(T-1) when traning on preseismic data

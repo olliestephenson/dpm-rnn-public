@@ -54,7 +54,8 @@ class Coherence_Timeseries(Dataset):
     def unbound(self,transform):
         """
         Transform coherence values into unbounded range with inverse sigmoid. Can transform coherence or squared coherence
-        Transform on squared coherence closely matches cramer-rao bound on phase variance
+        Transform on squared coherence closely matches cramer-rao bound on phase variance (see paper)
+        Can also add further transforms here
         """
 
         if transform == 'logit_squared':

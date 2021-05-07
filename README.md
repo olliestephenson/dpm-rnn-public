@@ -4,7 +4,7 @@ Deep learning code implementing the satellite-based damage mapping method from S
 
 Contact: oliver.stephenson@caltech.edu
 
-Written in PyTorch v1.0.1
+Written in PyTorch v1.0.1, tested for v1.7.0
 
 THIS IS RESEARCH CODE PROVIDED TO YOU "AS IS" WITH NO WARRANTIES OF CORRECTNESS. USE AT YOUR OWN RISK.
 
@@ -15,6 +15,8 @@ This readme assumes you already have familiarity with [SAR](https://en.wikipedia
 These scripts are used to create damage proxy maps from sequential InSAR coherence time series using machine learning. The input data are a sequential series of pre-event InSAR coherence images (i.e. if you have SAR acquisitions A,B,C then we want the coherences for A-B and B-C) and one co-event coherence image (i.e. the coherence between the final pre-event SAR acquisition and the first post-event SAR acquisition). Best performance will be obtained when the temporal baseline is constant between acquisitsions.
 
 This code assumes that you already have a stack of coherence images. These images can be produced using freely available [Sentiel-1 data](https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/), which can be processed using the [InSAR Scientific Computing Environment (ISCE)](https://github.com/isce-framework/isce2). The method has not been tested with data from other SAR satellites, but will presumably work similarly assuming there are regular acqusitions before the natural hazard.
+
+When creating damage maps you will need to think about your coordinate system. We do all of our processing in 'radar' coordinates, then map the final damage map to geographic coordinates for plotting/analysis. 
 
 This method assumes that your natural hazard occured between two satellite acqusitions, with no anomalous behavior beforehand. Results may be worse for seasonal hazards, or hazards that occured over a longer period of time. We welcome discussions about potential improvements/modifications. Please get in touch! 
 
@@ -37,7 +39,7 @@ This method assumes that your natural hazard occured between two satellite acqus
 
 `config_jsons/` contains configuration JSONs for `generate_dpm.py`:
 1. `train_dataset` (required, str) - coherence dataset used to train model (usually over a large region, around 100 km by 100 km).
-2. `deploy_dataset` (required, str) - coherence dataset used to generate DPM (usually over a smaller region, e.g. a town or a city).
+2. `deploy_dataset` (required, str) - coherence dataset used to generate DPM (usually over a smaller area in the same geographic region, e.g. a town or a city).
 3. `model_hyperparamters` (optional, dict) - see `config_jsons/example.json`, default parameters in code.
 4. `training_hyperparameters` (optional, dict) - see `config_jsons/example.json`, default parameters in code.
 5. `transform` (optional, str) - transform applied to map the coherence from [0,1] to an unbounded space before training. Either `logit_squared` (the logit transform of the coherence squared, used in the paper, default) or `logit` (logit transform without squaring the coherence). Other tranforms can easily be added. 
@@ -98,11 +100,20 @@ In general, you want as small a model as possible (which will be less prone to o
 
 In general, you want small `learning_rate` and `batch_size` as long as it doesn't take too many `num_epochs` to converge.
 
+### Installation
+
+In order to run this code, you need to install PyTorch and several dependencies. We recommend using a package management system such as [Conda](https://docs.conda.io/en/latest/) to install these packages into a dedicated environment.  
+
+If you have GPUs available and want to make use of them during training (which is substantially faster), you will need to install the relevant version of the cudatoolkit package, or potentially build from source. This will depend on your machine and CUDA version. See [here](https://pytorch.org/get-started/locally/) for more information. 
+
+To check if you have access to GPU training, after installation open a python terminal and do 'import torch; torch.cuda.is_available()'. This should be true.
+
+
 ## Credit 
 
-Citation: Stephenson et al. 2021, IEEE TGRS (in revision)
+Citation: Stephenson et al. 2021, IEEE TGRS (in revision), and see this [AGU abstract](https://ui.adsabs.harvard.edu/abs/2019AGUFM.G13C0567S/abstract). 
 
-Code written by Eric Zhan, with contributions by Oliver Stephenson 
+Code written by Eric Zhan and Oliver Stephenson 
 
 Contact: oliver.stephenson@caltech.edu
 

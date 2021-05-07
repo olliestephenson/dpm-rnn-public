@@ -4,7 +4,7 @@ Deep learning code implementing the satellite-based damage mapping method from S
 
 Contact: oliver.stephenson@caltech.edu
 
-Written in PyTorch v1.0.1, tested for v1.7
+Written in PyTorch v1.0.1, tested for v1.7.0
 
 THIS IS RESEARCH CODE PROVIDED TO YOU "AS IS" WITH NO WARRANTIES OF CORRECTNESS. USE AT YOUR OWN RISK.
 

@@ -135,7 +135,7 @@ def compute_scores(model, dataset, device, return_ts=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', type=str,
-                        required=True, default='',
+                        required=True,
                         help='config JSON file')
     parser.add_argument('--config_path', type=str,
                         required=False, default='config_jsons',
@@ -149,12 +149,12 @@ if __name__ == '__main__':
     parser.add_argument('--return_ts',type=bool,
                         required=False, default=False,
                         help='If true, saves mean, std and z-score for every timestep. Can rerun after training to output full ts with best model')
-    parser.add_argument('-d', '--device_id', type=int,
-                        required=False, default=-1,
-                        help='device to use (cpu or gpu)')
     parser.add_argument('--best_model', default=None, type=str,
                         required=False,
                         help='path to PyTorch state_dict from previous training to deploy on the data (skips training, optional)')
+    parser.add_argument('-d', '--device_id', type=int,
+                        required=False, default=-1,
+                        help='device to use (cpu or gpu)')
     args = parser.parse_args()
 
     # Load config JSON and check for required fields

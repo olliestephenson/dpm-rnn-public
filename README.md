@@ -58,11 +58,21 @@ This method assumes that your natural hazard occured between two satellite acqus
 `python generate_dpm.py -d <device_id> --config_path <path to config JSON directory> --config <config JSON filename> --save_dir <save directory> --return_ts <bool>`
 
 ### Command line variables 
-`-d` - Device id. Controls the GPU used for training. Set to -1 to train using a CPU. Defaults to CPU if GPU is not available. `print(torch.has_cuda)` should return `True` for GPU training. 
-`--config_path` - Path to directory containing the JSON configuration files. 
+
 `--config` - Name of the JSON configuration file for this specific run.
-`save_dir` - Directory in which to save outputs.
-`return_ts` - If true, code returns the mean and standard deviation of the forecast for every timestep, rather than just the final damage proxy map.
+
+`--config_path` - Path to directory containing the JSON configuration files. 
+
+`--dataset_json` - JSON file containing details on all training and deployment datasets 
+
+`--save_dir` - Directory in which to save outputs. If there is already a trained model in the relevant sub-directory, the code will just deploy the model on the data.
+
+`--return_ts` - If true, code returns the mean and standard deviation of the forecast for every timestep, rather than just the final damage proxy map.
+
+`--best_model` - Path to PyTorch `state_dict` saved from previous training (optional). Takes precedence over any previously saved models in `save_dir`.  
+
+`-d` - Device id. Controls the GPU used for training. Set to -1 to train using a CPU. Defaults to CPU if GPU is not available. `print(torch.has_cuda)` should return `True` for GPU training. 
+
 
 ### Example
 We provide some randomly generated data (test_dataset.npy) on which to test the code. As the data is randomly generated the results will not be physically meaningful. You can test the code by running: 
@@ -113,7 +123,7 @@ To check if you have access to GPU training, after installation open a python te
 
 Citation: Stephenson et al. 2021, IEEE TGRS (in revision), and see this [AGU abstract](https://ui.adsabs.harvard.edu/abs/2019AGUFM.G13C0567S/abstract). 
 
-Code written by Eric Zhan and Oliver Stephenson 
+Code written by Eric Zhan and Oliver Stephenson. Development of the method was done by authors of Stephenson et al. (2021). 
 
 Contact: oliver.stephenson@caltech.edu
 

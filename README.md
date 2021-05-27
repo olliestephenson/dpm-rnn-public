@@ -1,6 +1,8 @@
 # dpm-coherence-rnn
 
-Deep learning code implementing the satellite-based damage mapping method from Stephenson et al. 2021, IEEE TGRS (in revision). 
+Deep learning code implementing the satellite-based damage mapping method from Stephenson et al. 2021, IEEE TGRS (accepted).
+
+The artice is available on [arXiv](https://arxiv.org/abs/2105.11544). 
 
 Contact: oliver.stephenson@caltech.edu
 

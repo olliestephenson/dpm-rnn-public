@@ -123,7 +123,7 @@ To check if you have access to GPU training, after installation open a python te
 
 ## Credit 
 
-Citation: Stephenson et al. 2021, IEEE TGRS (in revision), and see this [AGU abstract](https://ui.adsabs.harvard.edu/abs/2019AGUFM.G13C0567S/abstract). 
+Citation: Stephenson et al. 2021, IEEE TGRS (accepted), and see the version on [arXiv](https://arxiv.org/abs/2105.11544). 
 
 Code written by Eric Zhan and Oliver Stephenson. Development of the method was done by authors of Stephenson et al. (2021). 
 

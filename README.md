@@ -1,8 +1,8 @@
 # dpm-coherence-rnn
 
-Deep learning code implementing the satellite-based damage mapping method from Stephenson et al. 2021, IEEE TGRS (accepted).
+Deep learning code implementing the satellite-based damage mapping method from [Stephenson et al. 2021, IEEE Trasactions on Geoscience and Remote Sensing](https://ieeexplore.ieee.org/document/9467551).
 
-The artice is available on [arXiv](https://arxiv.org/abs/2105.11544). 
+The artice is also available on [arXiv](https://arxiv.org/abs/2105.11544). 
 
 Contact: oliver.stephenson@caltech.edu
 
@@ -16,7 +16,7 @@ This readme assumes you already have familiarity with [SAR](https://en.wikipedia
 
 These scripts are used to create damage proxy maps from sequential InSAR coherence time series using machine learning. The input data are a sequential series of pre-event InSAR coherence images (i.e. if you have SAR acquisitions A,B,C then we want the coherences for A-B and B-C) and one co-event coherence image (i.e. the coherence between the final pre-event SAR acquisition and the first post-event SAR acquisition). Best performance will be obtained when the temporal baseline is constant between acquisitsions.
 
-This code assumes that you already have a stack of coherence images. These images can be produced using freely available [Sentiel-1 data](https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/), which can be processed using the [InSAR Scientific Computing Environment (ISCE)](https://github.com/isce-framework/isce2). The method has not been tested with data from other SAR satellites, but will presumably work similarly assuming there are regular acqusitions before the natural hazard.
+This code assumes that you already have a stack of coherence images. These images can be produced using freely available [Sentiel-1 data](https://asf.alaska.edu/data-sets/sar-data-sets/sentinel-1/), which can be processed using the [InSAR Scientific Computing Environment (ISCE)](https://github.com/isce-framework/isce2). The method has not been tested with data from other SAR satellites, but will presumably work similarly assuming there are regular acqusitions before the natural hazard and the satellite spatial baseline is well controlled.
 
 When creating damage maps you will need to think about your coordinate system. We do all of our processing in 'radar' coordinates, then map the final damage map to geographic coordinates for plotting/analysis. 
 
@@ -118,12 +118,12 @@ In order to run this code, you need to install PyTorch and several dependencies.
 
 If you have GPUs available and want to make use of them during training (which is substantially faster), you will need to install the relevant version of the cudatoolkit package, or potentially build from source. This will depend on your machine and CUDA version. See [here](https://pytorch.org/get-started/locally/) for more information. 
 
-To check if you have access to GPU training, after installation open a python terminal and do 'import torch; torch.cuda.is_available()'. This should be true.
+To check if you have access to GPU training, after installation open a python terminal and do 'import torch; torch.cuda.is_available()'. This should return 'true'.
 
 
 ## Credit 
 
-Citation: Stephenson et al. 2021, IEEE TGRS (accepted), and see the version on [arXiv](https://arxiv.org/abs/2105.11544). 
+Citation: [Stephenson et al. 2021, IEEE TGRS](https://ieeexplore.ieee.org/document/9467551), and see the version on [arXiv](https://arxiv.org/abs/2105.11544). 
 
 Code written by Eric Zhan and Oliver Stephenson. Development of the method was done by authors of Stephenson et al. (2021). 
 

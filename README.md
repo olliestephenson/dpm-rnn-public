@@ -114,11 +114,11 @@ In general, you want small `learning_rate` and `batch_size` as long as it doesn'
 
 ### Installation
 
-In order to run this code, you need to install PyTorch and several dependencies. We recommend using a package management system such as [Conda](https://docs.conda.io/en/latest/) to install these packages into a dedicated environment.  
+In order to run this code, you need to install PyTorch and several dependencies. We recommend using a package management system such as [Conda](https://docs.conda.io/en/latest/) to install these packages into a dedicated environment. The code itself doesn't require installation—you can just [clone](https://www.atlassian.com/git/tutorials/setting-up-a-repository/git-clone) the repository and run it on your machine once the dependencies are installed.   
 
 If you have GPUs available and want to make use of them during training (which is substantially faster), you will need to install the relevant version of the cudatoolkit package, or potentially build from source. This will depend on your machine and CUDA version. See [here](https://pytorch.org/get-started/locally/) for more information. 
 
-To check if you have access to GPU training, after installation open a python terminal and do 'import torch; torch.cuda.is_available()'. This should return 'true'.
+To check if you have access to GPU training, after installation open a python terminal and do `import torch; torch.cuda.is_available()`. This should return `True`.
 
 
 ## Credit 

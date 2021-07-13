@@ -1,6 +1,6 @@
 # dpm-coherence-rnn
 
-Deep learning code implementing the satellite-based damage mapping method from [Stephenson et al. 2021, IEEE Trasactions on Geoscience and Remote Sensing](https://ieeexplore.ieee.org/document/9467551).
+Deep learning code implementing the satellite-based damage mapping method from [Stephenson et al. (2021), IEEE Trasactions on Geoscience and Remote Sensing](https://ieeexplore.ieee.org/document/9467551).
 
 The artice is also available on [arXiv](https://arxiv.org/abs/2105.11544). 
 
@@ -123,9 +123,9 @@ To check if you have access to GPU training, after installation open a python te
 
 ## Credit 
 
-Citation: [Stephenson et al. 2021, IEEE TGRS](https://ieeexplore.ieee.org/document/9467551), and see the version on [arXiv](https://arxiv.org/abs/2105.11544). 
+Citation: [Stephenson et al. (2021), IEEE TGRS](https://ieeexplore.ieee.org/document/9467551), and see the version on [arXiv](https://arxiv.org/abs/2105.11544). 
 
-Code written by Eric Zhan and Oliver Stephenson. Development of the method was done by authors of Stephenson et al. (2021). 
+Code written by Eric Zhan and Oliver Stephenson. The method was developed by the authors of Stephenson et al. (2021). 
 
 Contact: oliver.stephenson@caltech.edu
 
